@@ -38,9 +38,8 @@
     NSString *filePath = [[NSBundle mainBundle]pathForResource:@"111" ofType:@"png"];
     
     //2.设置纹理参数
-    //纹理坐标原点是左下角,但是图片显示原点应该是左上角.
+    //纹理坐标原点是左下角,但是图片显示原点应该是左上角。不传递则颠倒
     NSDictionary *options = [NSDictionary dictionaryWithObjectsAndKeys:@(1),GLKTextureLoaderOriginBottomLeft, nil];
-    
     GLKTextureInfo *textureInfo = [GLKTextureLoader textureWithContentsOfFile:filePath options:options error:nil];
     
     //3.使用苹果GLKit 提供GLKBaseEffect 完成着色器工作(顶点/片元)
@@ -171,6 +170,7 @@
  GLKView对象使其OpenGL ES上下文成为当前上下文，并将其framebuffer绑定为OpenGL ES呈现命令的目标。然后，委托方法应该绘制视图的内容。
 */
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
+    NSLog(@"---===---==");
     //1.
     glClear(GL_COLOR_BUFFER_BIT);
     
@@ -181,5 +181,18 @@
     glDrawArrays(GL_TRIANGLES, 0, 6);
 }
 
+/*
+ GLKViewController: 一个管理OpenGL ES渲染循环的VC。
+ 本质上就是封装了一个CADisplayLink，定时调用[DisplayLink display]，进而调用delegate方法glkView:drawInRect
+ 下一个demo，不用GLKViewController，自己封装
+ 
+ glkView:drawInRect，第二个断点堆栈
+   frame #0: 0x00000001075d1248 OpenGL_ES_002`-[ViewController glkView:drawInRect:](self=0x00007ff389804080, _cmd="glkView:drawInRect:",
+   frame #1: 0x00007fff25b99f47 GLKit`-[GLKView _display:] + 275
+   frame #2: 0x00007fff25b9b0bb GLKit`-[GLKViewController _updateAndDraw] + 493
+   frame #3: 0x00007fff2b3b4186 QuartzCore`CA::Display::DisplayLink::dispatch_items(unsigned long long, unsigned long long, unsigned long long) + 538
+   frame #4: 0x00007fff2b48b768 QuartzCore`display_timer_callback(__CFMachPort*, void*, long, void*) + 299
+   frame #5: 0x00007fff23d627dd CoreFoundation`__CFMachPortPerform + 157
+ */
 
 @end

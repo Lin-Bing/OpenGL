@@ -16,6 +16,8 @@
 		1371AF3624D561EA0076D31C /* GCView.m in Sources */ = {isa = PBXBuildFile; fileRef = 1371AF3524D561EA0076D31C /* GCView.m */; };
 		1371AF3824D572CA0076D31C /* shaderf.fsh in Resources */ = {isa = PBXBuildFile; fileRef = 1371AF3724D572CA0076D31C /* shaderf.fsh */; };
 		1371AF3A24D572E00076D31C /* shaderv.vsh in Resources */ = {isa = PBXBuildFile; fileRef = 1371AF3924D572E00076D31C /* shaderv.vsh */; };
+		91EECEF2286B215E00142B64 /* 222.png in Resources */ = {isa = PBXBuildFile; fileRef = 91EECEF1286B215E00142B64 /* 222.png */; };
+		91EECEF4286B227500142B64 /* 111.png in Resources */ = {isa = PBXBuildFile; fileRef = 91EECEF3286B227500142B64 /* 111.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -33,6 +35,8 @@
 		1371AF3524D561EA0076D31C /* GCView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = GCView.m; sourceTree = "<group>"; };
 		1371AF3724D572CA0076D31C /* shaderf.fsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shaderf.fsh; sourceTree = "<group>"; };
 		1371AF3924D572E00076D31C /* shaderv.vsh */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = shaderv.vsh; sourceTree = "<group>"; };
+		91EECEF1286B215E00142B64 /* 222.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 222.png; sourceTree = SOURCE_ROOT; };
+		91EECEF3286B227500142B64 /* 111.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = 111.png; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +75,8 @@
 				1371AF2224D560AC0076D31C /* ViewController.m */,
 				1371AF3424D561EA0076D31C /* GCView.h */,
 				1371AF3524D561EA0076D31C /* GCView.m */,
+				91EECEF1286B215E00142B64 /* 222.png */,
+				91EECEF3286B227500142B64 /* 111.png */,
 				1371AF3724D572CA0076D31C /* shaderf.fsh */,
 				1371AF3924D572E00076D31C /* shaderv.vsh */,
 				1371AF2424D560AC0076D31C /* Main.storyboard */,
@@ -139,6 +145,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				91EECEF2286B215E00142B64 /* 222.png in Resources */,
+				91EECEF4286B227500142B64 /* 111.png in Resources */,
 				1371AF3A24D572E00076D31C /* shaderv.vsh in Resources */,
 				1371AF2B24D560B50076D31C /* LaunchScreen.storyboard in Resources */,
 				1371AF2824D560B50076D31C /* Assets.xcassets in Resources */,
@@ -298,6 +306,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4Q2P6MRA3R;
 				INFOPLIST_FILE = OpenGL_ES_004/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
@@ -314,6 +323,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = 4Q2P6MRA3R;
 				INFOPLIST_FILE = OpenGL_ES_004/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

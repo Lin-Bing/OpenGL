@@ -47,7 +47,7 @@
 #pragma mark -- GLKViewDelegate
 //绘制视图的内容
 /*
- GLKView对象使其OpenGL ES上下文成为当前上下文，并将其framebuffer绑定为OpenGL ES呈现命令的目标。然后，委托方法应该绘制视图的内容。
+ GLKView对象使其OpenGL ES上下文成为当前上下文，并将其framebuffer绑定为OpenGL ES呈现命令的目标。然后，委托该方法应该绘制视图的内容。
 */
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     glClear(GL_COLOR_BUFFER_BIT);

@@ -320,10 +320,12 @@
     //6.使用默认方式绘制
     CGContextDrawImage(spriteContext, rect, spriteImage);
    
+    // 将图片源文件翻转 （还可以在着色器中翻转纹理坐标）
 //    CGContextTranslateCTM(spriteContext, rect.origin.x, rect.origin.y);
     CGContextTranslateCTM(spriteContext, 0, rect.size.height);
     CGContextScaleCTM(spriteContext, 1.0, -1.0);
 //    CGContextTranslateCTM(spriteContext, -rect.origin.x, -rect.origin.y);
+   
     CGContextDrawImage(spriteContext, rect, spriteImage);
     
     //7、画图完毕就释放上下文

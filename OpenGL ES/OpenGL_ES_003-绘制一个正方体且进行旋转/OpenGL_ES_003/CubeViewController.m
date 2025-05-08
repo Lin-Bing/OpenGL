@@ -61,10 +61,9 @@ static NSInteger const kCoordCount = 36;
     
     //3. 添加CADisplayLink
     [self addCADisplayLink];
-    
 }
--(void) addCADisplayLink{
-   
+
+- (void)addCADisplayLink{
     //CADisplayLink 类似定时器,提供一个周期性调用.属于QuartzCore.framework中.
     //具体可以参考该博客 https://www.cnblogs.com/panyangjun/p/4421904.html
     self.angle = 0;
@@ -94,7 +93,7 @@ static NSInteger const kCoordCount = 36;
     [self.view addSubview:self.glkView];
 
     //5.获取纹理图片
-    NSString *imagePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"kunkun.jpg"];
+    NSString *imagePath = [[NSBundle mainBundle]pathForResource:@"111" ofType:@"png"];
     UIImage *image = [UIImage imageWithContentsOfFile:imagePath];
     
     //6.设置纹理参数
@@ -104,6 +103,7 @@ static NSInteger const kCoordCount = 36;
                                                                  error:NULL];
     //7.使用baseEffect
     self.baseEffect = [[GLKBaseEffect alloc] init];
+    // 纹理ID，缓冲目标GL_TEXTURE_2D
     self.baseEffect.texture2d0.name = textureInfo.name;
     self.baseEffect.texture2d0.target = textureInfo.target;
     //开启光照效果
@@ -203,10 +203,14 @@ static NSInteger const kCoordCount = 36;
     [self.baseEffect prepareToDraw];
     //4.绘图
     glDrawArrays(GL_TRIANGLES, 0, kCoordCount);
-
 }
 
 #pragma mark - update
+
+/*
+ 不用GLKViewController，自己封装基于CADisplayLink编写渲染循环控制流程
+ 可以看到，在定时循环中调用[GLKView display]时，就会触发代理回调glkView:(GLKView *)view drawInRect:，只需在代理回调中做渲染逻辑即可
+ */
 - (void)update {
    
     //1.计算旋转度数

@@ -8,6 +8,7 @@
 
 #import "ViewController.h"
 #import "GCView.h"
+#import <OpenGLES/ES3/glext.h>
 
 @interface ViewController ()
 
@@ -23,5 +24,11 @@
     [self.view addSubview:GCView.new];
 }
 
+
+
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+//    NSLog(@"开始抓住");
+//    glInsertEventMarkerEXT(0, "com.apple.GPUTools.event.debug-frame");
+}
 
 @end

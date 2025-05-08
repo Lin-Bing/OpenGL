@@ -20,7 +20,8 @@
 
 
 #import "GCView.h"
-#import <OpenGLES/ES2/gl.h>
+#import <OpenGLES/ES3/gl.h>
+#import <OpenGLES/ES3/glext.h>
 
 @interface GCView ()
 
@@ -38,6 +39,11 @@
 
 @implementation GCView
 
+- (void)touchesBegan:(NSSet<UITouch *> *)touches withEvent:(UIEvent *)event {
+    glInsertEventMarkerEXT(0, "com.apple.GPUTools.event.debug-frame");
+    NSLog(@"---=== catch");
+}
+
 + (Class)layerClass {
     return CAEAGLLayer.class;
 }
@@ -49,7 +55,7 @@
     //2.设置图形上下文
     [self setupContext];
     
-    //3.清空缓存区
+    //3.清空缓存区 （可以去掉）
     [self deleteRenderAndFrameBuffer];
 
     //4.设置RenderBuffer
@@ -88,9 +94,9 @@
 // 2.创建上下文
 - (void)setupContext {
     //1.指定OpenGL ES 渲染API版本，我们使用2.0
-    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES2;
+    EAGLRenderingAPI api = kEAGLRenderingAPIOpenGLES3;
     //2.创建图形上下文
-    EAGLContext *context = [[EAGLContext alloc]initWithAPI:api];
+    EAGLContext *context = [[EAGLContext alloc] initWithAPI:api];
     //3.判断是否创建成功
     if (!context) {
         NSLog(@"Create context failed!");
@@ -101,6 +107,7 @@
         NSLog(@"setCurrentContext failed!");
         return;
     }
+
     //5.将局部context，变成全局的
     self.myContext = context;
 }
@@ -136,6 +143,10 @@
     glBindRenderbuffer(GL_RENDERBUFFER, self.myColorRenderBuffer);
     
     //5.将可绘制对象drawable object's  CAEAGLLayer的存储绑定到OpenGL ES renderBuffer对象
+    /*
+     这个方法其实是下面方法的替代：颜色格式由于drawableProperties指定，尺寸即是EAGLDrawable的尺寸
+     void glRenderbufferStorage(GLenum target, GLenum internalformat, GLsizei width, GLsizei height);
+     */
     [self.myContext renderbufferStorage:GL_RENDERBUFFER fromDrawable:self.myEagLayer];
 }
 
@@ -165,8 +176,12 @@
 
 //6.开始绘制
 -(void)renderLayer {
+    
+//    glEnable(GL_BLEND);
+//    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+
     //设置清屏颜色
-    glClearColor(0.3f, 0.45f, 0.5f, 1.0f);
+    glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
     //清除屏幕
     glClear(GL_COLOR_BUFFER_BIT);
     
@@ -264,7 +279,7 @@
     glVertexAttribPointer(textCoor, 2, GL_FLOAT, GL_FALSE, sizeof(GLfloat)*5, (float *)NULL + 3);
     
     //10.加载纹理
-    [self setupTexture:@"111"];
+    [self setupTexture:@"222"];
     
     //11. 设置纹理采样器 sampler2D
     glUniform1i(glGetUniformLocation(self.myPrograme, "colorMap"), 0);
@@ -274,13 +289,20 @@
     
     //13.从渲染缓存区显示到屏幕上
     [self.myContext presentRenderbuffer:GL_RENDERBUFFER];
+    
+    NSLog(@"---==-=");
 }
 
 // 从图片中加载纹理:图片解压缩
 - (GLuint)setupTexture:(NSString *)fileName {
     
+    // 1-7：图片解码
+    
+    NSString *str = [[NSBundle mainBundle] pathForResource:fileName ofType:@"png"];
+    NSData *d = [NSData dataWithContentsOfFile:str];
+    CGImageRef spriteImage = [UIImage imageWithData:d].CGImage;
     //1、将 UIImage 转换为 CGImageRef
-    CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
+//    CGImageRef spriteImage = [UIImage imageNamed:fileName].CGImage;
     
     //判断图片是否获取成功
     if (!spriteImage) {
@@ -351,8 +373,13 @@
      参数8：type
      参数9：纹理数据
      */
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fw, fh, 0, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
     
+    // 先分配内存，再填充数据
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, fw, fh, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, fw, fh, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
+    
+//    glTexSubImage2D(GL_TEXTURE_2D, 0, 50, 50, 200, 300, GL_RGBA, GL_UNSIGNED_BYTE, spriteData);
+    NSLog(@"--===--=: %f %f", fw, fh);
     //11.释放spriteData
     free(spriteData);
     return 0;

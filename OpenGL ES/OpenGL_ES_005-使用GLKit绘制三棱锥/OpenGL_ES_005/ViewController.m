@@ -58,23 +58,11 @@
     
     [EAGLContext setCurrentContext:self.mContext];
     glEnable(GL_DEPTH_TEST);
-    
 }
 
 //2.渲染图形
 -(void)render {
     //1.顶点数据
-    //前3个元素，是顶点数据；中间3个元素，是顶点颜色值，最后2个是纹理坐标
-//    GLfloat attrArr[] =
-//    {
-//        -0.5f, 0.5f, 0.0f,      1.0f, 0.0f, 1.0f,       0.0f, 1.0f,//左上
-//        0.5f, 0.5f, 0.0f,       1.0f, 0.0f, 1.0f,       1.0f, 1.0f,//右上
-//        -0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f,       0.0f, 0.0f,//左下
-//
-//        0.5f, -0.5f, 0.0f,      1.0f, 1.0f, 1.0f,       1.0f, 0.0f,//右下
-//        0.0f, 0.0f, 1.0f,       0.0f, 1.0f, 0.0f,       0.5f, 0.5f,//顶点
-//    };
-    
     GLfloat attrArr[] =
     {
         -0.5f, 0.5f, 0.0f,      1.0f, 0.0f, 1.0f, //左上
@@ -84,7 +72,6 @@
         0.5f, -0.5f, 0.0f,      1.0f, 1.0f, 1.0f, //右下
         0.0f, 0.0f, 1.0f,       0.0f, 1.0f, 0.0f, //顶点
     };
-    
     //2.绘图索引
     GLuint indices[] =
     {
@@ -114,22 +101,19 @@
     //使用顶点数据
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, NULL);
-    
     //使用颜色数据
     glEnableVertexAttribArray(GLKVertexAttribColor);
     glVertexAttribPointer(GLKVertexAttribColor, 3, GL_FLOAT, GL_FALSE, sizeof(GLfloat) * 6, (GLfloat *)NULL + 3);
 
     
-    //着色器
+    //着色器，统一交给高度封装的GLKBaseEffect，更新属性即可更新着色器顶点数据
     self.mEffect = [[GLKBaseEffect alloc]init];
-
     //投影视图
     CGSize size = self.view.bounds.size;
     float aspect = fabs(size.width / size.height);
     GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(90.0), aspect, 0.1f, 100.0);
     projectionMatrix = GLKMatrix4Scale(projectionMatrix, 1.0f, 1.0f, 1.0f);
     self.mEffect.transform.projectionMatrix = projectionMatrix;
-    
     //模型视图
     GLKMatrix4 modelViewMatrix = GLKMatrix4Translate(GLKMatrix4Identity, 0.0f, 0.0f, -2.0f);
     self.mEffect.transform.modelviewMatrix = modelViewMatrix;
@@ -140,11 +124,9 @@
     timer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, dispatch_get_main_queue());
     dispatch_source_set_timer(timer, DISPATCH_TIME_NOW, seconds * NSEC_PER_SEC, 0.0);
     dispatch_source_set_event_handler(timer, ^{
-       
         self.XDegree += 0.1f * self.XB;
         self.YDegree += 0.1f * self.YB;
         self.ZDegree += 0.1f * self.ZB ;
-        
     });
     dispatch_resume(timer);
 }
@@ -152,24 +134,18 @@
 //场景数据变化
 -(void)update {
     GLKMatrix4 modelViewMatrix = GLKMatrix4Translate(GLKMatrix4Identity, 0.0f, 0.0f, -2.5);
-    
     modelViewMatrix = GLKMatrix4RotateX(modelViewMatrix, self.XDegree);
     modelViewMatrix = GLKMatrix4RotateY(modelViewMatrix, self.YDegree);
     modelViewMatrix = GLKMatrix4RotateZ(modelViewMatrix, self.ZDegree);
-    
     self.mEffect.transform.modelviewMatrix = modelViewMatrix;
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect {
     glClearColor(0.3f, 0.3f, 0.3f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
-    
     [self.mEffect prepareToDraw];
     glDrawElements(GL_TRIANGLES, self.count, GL_UNSIGNED_INT, 0);
 }
-
-
 
 - (IBAction)XClick:(UIButton *)sender {
     _XB = !_XB;

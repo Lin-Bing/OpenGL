@@ -75,11 +75,11 @@
 
 - (void)layoutSubviews {
     [self addSubview:self.XButton];
-    self.XButton.frame = CGRectMake(10, 500, 60, 60);
+    self.XButton.frame = CGRectMake(80, 600, 60, 60);
     [self addSubview:self.YButton];
-    self.YButton.frame = CGRectMake(CGRectGetMaxX(self.XButton.frame) + 20, 500, 60, 60);
+    self.YButton.frame = CGRectMake(CGRectGetMaxX(self.XButton.frame) + 20, 600, 60, 60);
     [self addSubview:self.ZButton];
-    self.ZButton.frame = CGRectMake(CGRectGetMaxX(self.YButton.frame) + 20, 500, 60, 60);
+    self.ZButton.frame = CGRectMake(CGRectGetMaxX(self.YButton.frame) + 20, 600, 60, 60);
     
     //1.设置图层
     [self setupLayer];
@@ -172,21 +172,16 @@
     //3.获取顶点着色程序、片元着色器程序文件位置
     NSString* vertFile = [[NSBundle mainBundle] pathForResource:@"shaderv" ofType:@"glsl"];
     NSString* fragFile = [[NSBundle mainBundle] pathForResource:@"shaderf" ofType:@"glsl"];
-    
     //4.判断self.myProgram是否存在，存在则清空其文件
     if (self.myProgram) {
-        
         glDeleteProgram(self.myProgram);
         self.myProgram = 0;
     }
-    
     //5.加载程序到myProgram中来。
     self.myProgram = [self loadShader:vertFile frag:fragFile];
-    
     //6.链接
     glLinkProgram(self.myProgram);
     GLint linkSuccess;
-    
     //7.获取链接状态
     glGetProgramiv(self.myProgram, GL_LINK_STATUS, &linkSuccess);
     if (linkSuccess == GL_FALSE) {
@@ -207,8 +202,8 @@
         -0.5f, 0.5f, 0.0f,      1.0f, 0.0f, 1.0f, //左上0
         0.5f, 0.5f, 0.0f,       1.0f, 0.0f, 1.0f, //右上1
         -0.5f, -0.5f, 0.0f,     1.0f, 1.0f, 1.0f, //左下2
-        
         0.5f, -0.5f, 0.0f,      1.0f, 1.0f, 1.0f, //右下3
+        
         0.0f, 0.0f, 1.0f,       0.0f, 1.0f, 0.0f, //顶点4
     };
     
@@ -414,6 +409,7 @@
     //把着色器源代码编译成目标代码
     glCompileShader(*shader);
 }
+
 
 #pragma mark - XYClick
 
